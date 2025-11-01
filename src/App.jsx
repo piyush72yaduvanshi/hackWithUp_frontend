@@ -1,8 +1,8 @@
 import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Login from "./Pages/Login";
+import Signup from "./Pages/SignUp";
 import Home from "./Pages/Home";
 import ProtectedRoute from "./Pages/ProtectedRoute";
 import Profile from "./Pages/Profile";
