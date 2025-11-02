@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Navbar from "./NavBar";
 
 export default function Prices() {
   const [priceData, setPriceData] = useState(null);
@@ -65,7 +66,10 @@ export default function Prices() {
   };
 
   return (
-    <section className="bg-green-50 min-h-screen py-16 px-6 flex flex-col items-center">
+    <div>
+      <Navbar/>
+    
+    <div className="bg-green-50 min-h-screen py-16 px-6 flex flex-col items-center ml-0 lg:ml-[300px] ">
       <h1 className="text-4xl font-bold text-green-800 mb-3">
         🌾 Live Market Prices
       </h1>
@@ -107,7 +111,7 @@ export default function Prices() {
                   Fetching Price...
                 </span>
               ) : (
-                '🤖 Get AI Price for My Crop'
+                'Get Price for My Crop'
               )}
             </button>
 
@@ -178,6 +182,7 @@ export default function Prices() {
           <p className="mt-4 text-gray-600">🔍 Analyzing market data...</p>
         </div>
       )}
-    </section>
+    </div>
+    </div>
   );
 }

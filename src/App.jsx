@@ -13,6 +13,9 @@ import Benefits from "./Pages/Benefits";
 import Prices from "./Pages/Prices";
 import Chat from "./Pages/Chat";
 import Voice from "./Pages/Voice";
+import Calendar from "./Pages/Calendar";
+import LandInfo from "./Pages/LandInfo";
+import UpdateProfile from "./Pages/UpdateProfile";
 
 function App() {
   return (
@@ -29,6 +32,10 @@ function App() {
         <Route path="/prices" element={<Prices />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/voice" element={<Voice />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/landInfo" element={<LandInfo />} />
+        <Route path="/updateProfile" element={<UpdateProfile />} />
+
 
 
         {/* more routes */}
