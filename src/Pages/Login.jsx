@@ -4,6 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 const BACKEND_URL = 'https://hackwithupbackend-main-production.up.railway.app';
 
+// Create axios instance with credentials enabled globally
+const apiClient = axios.create({
+  baseURL: BACKEND_URL,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,53 +33,38 @@ function Login() {
     }
 
     try {
-      // IMPORTANT: Clear any existing user data BEFORE logging in
-      // This ensures we don't show old user data when logging in with a different account
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      
-      const response = await axios.post(`${BACKEND_URL}/auth/v1/login`, {
+      // Don't clear localStorage here - cookies are managed separately
+      const response = await apiClient.post('/auth/v1/login', {
         email,
         password
-      }, {
-        withCredentials: true, // Important for cookie-based auth
-        headers: {
-          'Content-Type': 'application/json'
-        }
       });
 
-      // Detailed console logging for response data
-      console.log('Full Response:', response.data);
-      console.log('Success:', response.data.success);
-      console.log('Message:', response.data.message);
-      console.log('User Data:', response.data.user);
+      console.log('Login Response:', response.data);
       console.log('User ID:', response.data.user.id);
       console.log('User Name:', response.data.user.name);
-      console.log('User Email:', response.data.user.email);
 
       // Handle successful login
       if (response.data.success) {
-        // Store NEW user data in localStorage
+        // Store user data in localStorage (for quick access)
         localStorage.setItem('user', JSON.stringify(response.data.user));
         
-        // Store token if present
+        // Store token if provided (as backup)
         if (response.data.token) {
           localStorage.setItem('token', response.data.token);
         }
 
-        // Force page reload to clear any cached data and ensure fresh state
-        window.location.href = '/profile';
+        // Redirect to profile (cookies are automatically sent via withCredentials)
+        navigate('/profile');
       }
       
     } catch (err) {
-      // Handle error
       console.error('Login Error:', err);
       console.error('Error Response:', err.response?.data);
       
       if (err.response) {
         setError(err.response.data.message || 'Login failed');
       } else if (err.request) {
-        setError('No response from server. Please try again.');
+        setError('No response from server. Please check your connection.');
       } else {
         setError('An error occurred. Please try again.');
       }
