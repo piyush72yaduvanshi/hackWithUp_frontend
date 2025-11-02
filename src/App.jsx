@@ -22,6 +22,8 @@ function App() {
     <BrowserRouter>
       {/* keep content below navbar */}
       <Routes>
+
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/home" element={<Home />} />
