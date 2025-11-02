@@ -37,7 +37,7 @@ function Profile() {
     try {
       setLoading(true);
       // Cookies are automatically sent via withCredentials
-      const response = await apiClient.get('/api/v1/profile');
+      const response = await apiClient.get('/auth/v1/profile');
       
       console.log('Profile Response:', response.data);
       
@@ -83,7 +83,7 @@ function Profile() {
     try {
       setError('');
       
-      const response = await apiClient.put('/api/v1/profile', {
+      const response = await apiClient.put('/auth/v1/profile', {
         name: formData.name,
         location: formData.location,
         landSize: formData.landSize,
