@@ -23,7 +23,7 @@ const UpdateProfile = () => {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/auth/v1/profile",
+          "https://hackwithupbackend-main-production.up.railway.app/auth/v1/profile",
           {
             withCredentials: true,
             headers: {
@@ -65,7 +65,7 @@ const UpdateProfile = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:5000/auth/v1/updateProfile",
+        "https://hackwithupbackend-main-production.up.railway.app/auth/v1/updateProfile",
         formData,
         {
           withCredentials: true,

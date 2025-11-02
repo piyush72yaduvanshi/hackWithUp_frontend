@@ -12,7 +12,7 @@ const Voice = () => {
     const chatRef = useRef(null);
 
     // Base API URL
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = "https://hackwithupbackend-main-production.up.railway.app/api";
 
     // 🎤 Speech recognition setup
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;

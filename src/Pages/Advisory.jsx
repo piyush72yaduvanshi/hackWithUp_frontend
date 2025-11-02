@@ -50,7 +50,7 @@ const Advisory = () => {
       setResult(null); // Clear previous result
 
       const res = await axios.post(
-        "http://localhost:5000/uploads/photos",
+        "https://hackwithupbackend-main-production.up.railway.app/uploads/photos",
         formData,
         {
           headers: {

@@ -30,7 +30,7 @@ function SignupForm() {
     setSuccess('');
 
     try {
-      const response = await fetch('http://localhost:5000/auth/v1/register', {
+      const response = await fetch('https://hackwithupbackend-main-production.up.railway.app/auth/v1/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

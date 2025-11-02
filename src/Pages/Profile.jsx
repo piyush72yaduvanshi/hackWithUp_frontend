@@ -21,7 +21,7 @@ function Profile() {
   const fetchProfile = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/auth/v1/profile",
+        "https://hackwithupbackend-main-production.up.railway.app/auth/v1/profile",
         {
           withCredentials: true,
           headers: {
@@ -57,7 +57,7 @@ function Profile() {
   const fetchCropAdvisory = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/crop-advisory",
+        "https://hackwithupbackend-main-production.up.railway.app/api/crop-advisory",
         {
           withCredentials: true,
         }
@@ -89,7 +89,7 @@ function Profile() {
   const fetchCropPriceData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/crop-prices",
+        "https://hackwithupbackend-main-production.up.railway.app/api/crop-prices",
         {
           withCredentials: true,
         }
@@ -112,7 +112,7 @@ function Profile() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/auth/v1/logout",
+        "https://hackwithupbackend-main-production.up.railway.app/auth/v1/logout",
         {},
         {
           withCredentials: true,

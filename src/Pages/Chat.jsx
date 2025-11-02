@@ -9,7 +9,7 @@ const Chat = () => {
   const lastMessageRef = useRef(null);
 
   // Base API URL - adjust according to your backend
-  const API_BASE_URL = "http://localhost:5000/api";
+  const API_BASE_URL = "https://hackwithupbackend-main-production.up.railway.app/api";
 
   useEffect(() => {
     if (lastMessageRef.current) {
