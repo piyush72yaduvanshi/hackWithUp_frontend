@@ -65,7 +65,7 @@ const UpdateProfile = () => {
 
     try {
       const response = await axios.put(
-        "https://hackwithupbackend-main-production.up.railway.app/auth/v1/updateProfile",
+        "https://hackfront.sya007.live/auth/v1/updateProfile",
         formData,
         {
           withCredentials: true,

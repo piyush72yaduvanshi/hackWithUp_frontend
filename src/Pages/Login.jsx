@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const BACKEND_URL = 'https://hackwithupbackend-main-production.up.railway.app';
+const BACKEND_URL = 'https://hackfront.sya007.live';
 
 // Create axios instance with credentials enabled globally
 const apiClient = axios.create({

@@ -27,7 +27,7 @@ export default function Prices() {
       setPriceData(null);
 
       const response = await axios.post(
-        "http://localhost:5000/auth/v1/priceThroughAi",
+        "https://hackfront.sya007.live/auth/v1/priceThroughAi",
         {}, // Backend uses user's profile data (location & main_crop), no need to send crop/city
         {
           withCredentials: true, // ✅ IMPORTANT: Send authentication cookie

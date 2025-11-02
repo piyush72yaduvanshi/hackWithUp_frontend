@@ -30,7 +30,7 @@ function SignupForm() {
     setSuccess('');
 
     try {
-      const response = await fetch('https://hackwithupbackend-main-production.up.railway.app/auth/v1/register', {
+      const response = await fetch('https://hackfront.sya007.live/auth/v1/register', {
         method: 'POST',
         credentials: 'include',
         headers: {

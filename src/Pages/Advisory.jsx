@@ -16,7 +16,7 @@ export default function Advisory() {
       setError(null);
 
       const response = await axios.post(
-        "http://localhost:5000/auth/v1/advisoryThroughAi",
+        "http://hackfront.sya007.live//auth/v1/advisoryThroughAi",
         {},
         {
           withCredentials: true,
