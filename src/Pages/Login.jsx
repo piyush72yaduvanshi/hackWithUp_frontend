@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const BACKEND_URL = 'https://hackwithupbackend-main-production.up.railway.app';
+// Use localhost for development, production URL for deployment
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
 
 // Create axios instance with credentials enabled globally
 const apiClient = axios.create({
