@@ -27,6 +27,7 @@ const Chat = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/messages/`, {
           method: 'GET',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -71,6 +72,7 @@ const Chat = () => {
       // Send user message
       const userMessageResponse = await fetch(`${API_BASE_URL}/messages/`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -94,6 +96,7 @@ const Chat = () => {
           // Get AI response
           const aiResponse = await fetch(`${API_BASE_URL}/chatgpt/`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
             },

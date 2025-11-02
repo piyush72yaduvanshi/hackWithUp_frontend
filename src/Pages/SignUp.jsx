@@ -32,6 +32,7 @@ function SignupForm() {
     try {
       const response = await fetch('https://hackwithupbackend-main-production.up.railway.app/auth/v1/register', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },

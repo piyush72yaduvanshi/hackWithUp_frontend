@@ -49,6 +49,7 @@ const Voice = () => {
 
             const userResponse = await fetch(`${API_BASE_URL}/messages/`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userMessage),
             });
@@ -56,6 +57,7 @@ const Voice = () => {
             // 2️⃣ Get AI reply
             const gptResponse = await fetch(`${API_BASE_URL}/chatgpt/`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text: command }),
             });
@@ -100,6 +102,7 @@ const Voice = () => {
         try {
             const response = await fetch(`${API_BASE_URL}/messages/`, {
                 method: 'GET',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
             });
             const data = await response.json();
