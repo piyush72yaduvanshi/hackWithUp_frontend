@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const BACKEND_URL = 'https://hackwithupbackend-main-production.up.railway.app';
+
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +29,7 @@ function Login() {
       localStorage.removeItem('user');
       localStorage.removeItem('token');
       
-      const response = await axios.post('https://hackwithupbackend-main-production.up.railway.app/auth/v1/login', {
+      const response = await axios.post(`${BACKEND_URL}/auth/v1/login`, {
         email,
         password
       }, {

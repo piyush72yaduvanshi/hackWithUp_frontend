@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Navbar from "./NavBar";
 
+const BACKEND_URL = 'https://hackwithupbackend-main-production.up.railway.app';
+
 function Profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,7 @@ function Profile() {
   const fetchProfile = async () => {
     try {
       const response = await axios.get(
-        "https://hackwithupbackend-main-production.up.railway.app/auth/v1/profile",
+        `${BACKEND_URL}/auth/v1/profile`,
         {
           withCredentials: true,
           headers: {
@@ -57,7 +59,7 @@ function Profile() {
   const fetchCropAdvisory = async () => {
     try {
       const response = await axios.get(
-        "https://hackwithupbackend-main-production.up.railway.app/api/crop-advisory",
+        `${BACKEND_URL}/api/crop-advisory`,
         {
           withCredentials: true,
         }
@@ -89,7 +91,7 @@ function Profile() {
   const fetchCropPriceData = async () => {
     try {
       const response = await axios.get(
-        "https://hackwithupbackend-main-production.up.railway.app/api/crop-prices",
+        `${BACKEND_URL}/api/crop-prices`,
         {
           withCredentials: true,
         }
@@ -112,7 +114,7 @@ function Profile() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "https://hackwithupbackend-main-production.up.railway.app/auth/v1/logout",
+        `${BACKEND_URL}/auth/v1/logout`,
         {},
         {
           withCredentials: true,
