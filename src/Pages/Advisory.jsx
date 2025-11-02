@@ -1,277 +1,156 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import Navbar from "../Pages/NavBar";
 
-const Advisory = () => {
-  const [file, setFile] = useState(null);
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
+export default function Advisory() {
+  const [advisoryData, setAdvisoryData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
+  useEffect(() => {
+    fetchAdvisoryData();
+  }, []);
 
-    // Validate file type
-    if (selectedFile) {
-      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-      if (!allowedTypes.includes(selectedFile.type)) {
-        alert("Only JPG and PNG files are allowed");
-        event.target.value = null; // Reset input
-        return;
-      }
-
-      // Validate file size (e.g., max 5MB)
-      const maxSize = 5 * 1024 * 1024;
-      if (selectedFile.size > maxSize) {
-        alert("File size exceeds 5 MB");
-        event.target.value = null;
-        return;
-      }
-
-      setFile(selectedFile);
-      setError(null); // Clear previous errors
-    }
-  };
-
-  const onHandleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!file) {
-      alert("Please upload a file first");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("image", file);
-
+  const fetchAdvisoryData = async () => {
     try {
       setLoading(true);
       setError(null);
-      setResult(null); // Clear previous result
 
-      const res = await axios.post(
-        "https://hackwithupbackend-main-production.up.railway.app/uploads/photos",
-        formData,
+      const response = await axios.post(
+        "http://localhost:5000/auth/v1/advisoryThroughAi",
+        {},
         {
+          withCredentials: true,
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json"
           },
-          timeout: 60000, // 60 second timeout for AI processing
+          timeout: 30000
         }
       );
 
-      console.log("Upload Response:", res.data);
-      console.log("Full Analysis:", res.data.fullAnalysis);
-      console.log("Plant Name:", res.data.plantName);
-      console.log("Disease:", res.data.disease);
-      console.log("Severity:", res.data.severity);
-      console.log("Treatment:", res.data.treatment);
-
-      setResult(res.data);
-      setFile(null); // Reset file after successful upload
-
-      // Reset form input
-      const fileInput = document.querySelector('input[type="file"]');
-      if (fileInput) fileInput.value = null;
-    } catch (error) {
-      console.error("Upload error:", error);
-
-      if (error.code === "ECONNABORTED") {
-        setError("Upload timeout. Please try again.");
-      } else if (error.response) {
-        setError(
-          `Server error: ${error.response.status}. ${
-            error.response.data?.message || "Check backend"
-          }`
-        );
-      } else if (error.request) {
-        setError("No response from server. Check if backend is running.");
+      console.log("Advisory Response:", response.data);
+      setAdvisoryData(response.data.data);
+      
+    } catch (err) {
+      console.error("Error fetching advisory data:", err);
+      
+      if (err.code === 'ECONNABORTED') {
+        setError("Request timeout. AI processing takes time, please try again.");
+      } else if (err.response) {
+        if (err.response.status === 401) {
+          setError("Please login first to access this feature. Redirecting to login...");
+          setTimeout(() => {
+            window.location.href = '/login';
+          }, 2000);
+        } else {
+          setError(`Server error: ${err.response.status}. ${err.response.data?.message || 'Please check backend'}`);
+        }
+      } else if (err.request) {
+        setError("No response from server. Check if backend is running on port 5000.");
       } else {
-        setError("Failed to upload. Please try again.");
+        setError("Failed to fetch advisory data. Please try again later.");
       }
-
-      alert(error.message || "Failed to upload. Check backend");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <Navbar />
-      <div className="ml-0 lg:ml-[300px] min-h-screen bg-gradient-to-b from-green-100 to-white font-[Poppins] text-green-800 px-6 py-10">
-        <h1 className="text-center text-3xl font-bold text-green-900 mb-10">
-          🌱 Detect crop diseases instantly by uploading a leaf image
-        </h1>
+    <section className="bg-green-50 min-h-screen py-16 px-6 flex flex-col items-center">
+      <h1 className="text-4xl font-bold text-green-800 mb-3">
+        🌾 Global Market Prices
+      </h1>
 
-        {/* 2 Column section */}
-        <div className="flex flex-col md:flex-row gap-6 justify-center">
-          {/* Instruction Box */}
-          <div className="bg-green-50 border-l-4 border-green-500 rounded-xl p-6 max-w-xl shadow-md">
-            <h3 className="text-lg font-semibold mb-3">
-              🍃 Upload a clear image of your crop leaf and let AI detect
-              diseases 🌾
-            </h3>
-            <h2 className="text-xl font-bold mb-2">Instructions</h2>
-            <ul className="list-disc ml-5 space-y-1">
-              <li>✅ Leaf must be clearly visible</li>
-              <li>✅ Upload only one leaf per image</li>
-              <li>✅ Supported: JPG, PNG</li>
-              <li>✅ Avoid blur / dark images</li>
-              <li>✅ Maximum file size: 5MB</li>
-            </ul>
+      <p className="text-gray-600 text-lg mb-10 max-w-2xl text-center">
+        Live mandi updates powered by KrishiSakhi's AI market intelligence.
+      </p>
+
+      <div className="bg-white w-full max-w-4xl rounded-xl shadow-lg p-8">
+        <div className="mb-6 text-center">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-1">
+            📈 Market Prices (per Quintal)
+          </h3>
+          <p className="text-sm text-gray-500">
+            Updated daily with national averages.
+          </p>
+        </div>
+
+        {/* Loading State */}
+        {loading ? (
+          <div className="text-center py-10">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading market prices...</p>
           </div>
-
-          {/* Upload Card */}
-          <form
-            onSubmit={onHandleSubmit}
-            className="bg-white border shadow-xl rounded-2xl p-6 w-full max-w-sm text-center"
-          >
-            <span className="text-2xl font-semibold">Upload your file</span>
-            <p className="text-gray-500 text-sm mt-1">
-              File should be an image
-            </p>
-
-            <label className="mt-6 border-2 border-dashed border-blue-300 rounded-lg p-6 cursor-pointer flex flex-col gap-2 items-center hover:bg-blue-50">
-              <span className="font-semibold">
-                Drop files here or click to browse
-              </span>
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/jpg"
-                required
-                className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                onChange={handleFileChange}
-              />
-            </label>
-
-            {file && (
-              <p className="text-sm text-green-600 mt-2">
-                Selected: {file.name} ({(file.size / 1024).toFixed(2)} KB)
-              </p>
-            )}
-
-            {error && (
-              <p className="text-sm text-red-600 mt-2 bg-red-50 p-2 rounded">
-                {error}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading || !file}
-              className={`px-7 py-3 rounded-lg mt-5 font-semibold transition ${
-                loading || !file
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-br from-green-500 to-green-700 text-white hover:opacity-90"
-              }`}
-            >
-              {loading ? "Uploading..." : "Upload"}
-            </button>
-          </form>
-        </div>
-
-        {/* Result Section */}
-        <div className="bg-green-50 border border-green-300 rounded-xl p-6 max-w-3xl mx-auto mt-10 shadow-lg">
-          <h2 className="text-xl font-semibold mb-3 text-green-900">Result</h2>
-
-          {loading ? (
-            <div className="text-center">
-              <p>⏳ Analyzing your leaf image...</p>
-              <div className="mt-4 animate-pulse">
-                <div className="h-4 bg-green-200 rounded w-3/4 mx-auto"></div>
-              </div>
+        ) : error ? (
+          // Error State
+          <div className="text-center py-10">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+              <p className="text-red-600 font-semibold mb-2">⚠️ Error Loading Data</p>
+              <p className="text-red-500 text-sm mb-4">{error}</p>
+              <button
+                onClick={fetchPriceData}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+              >
+                Retry
+              </button>
             </div>
-          ) : result ? (
-            <>
-              <p className="text-green-700 font-semibold">
-                ✅ Uploaded successfully!
-              </p>
-              {result._id && (
-                <p className="text-sm text-gray-600">
-                  <strong>Analysis ID:</strong> {result._id}
-                </p>
-              )}
-
-              <div className="mt-4 bg-white border border-gray-200 p-6 rounded-lg shadow-sm">
-                <h3 className="text-xl font-bold mb-4 text-green-800">
-                  🧾 AI Diagnosis Report
-                </h3>
-
-                {/* Quick Summary */}
-                {(result.plantName || result.disease || result.severity) && (
-                  <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {result.plantName && (
-                      <div className="bg-blue-50 p-3 rounded-lg">
-                        <p className="text-xs text-gray-600 font-semibold">
-                          Plant
-                        </p>
-                        <p className="text-sm font-bold text-blue-800">
-                          {result.plantName}
-                        </p>
-                      </div>
-                    )}
-                    {result.disease && (
-                      <div className="bg-yellow-50 p-3 rounded-lg">
-                        <p className="text-xs text-gray-600 font-semibold">
-                          Disease
-                        </p>
-                        <p className="text-sm font-bold text-yellow-800">
-                          {result.disease}
-                        </p>
-                      </div>
-                    )}
-                    {result.severity && (
-                      <div className="bg-red-50 p-3 rounded-lg">
-                        <p className="text-xs text-gray-600 font-semibold">
-                          Severity
-                        </p>
-                        <p className="text-sm font-bold text-red-800">
-                          {result.severity}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Treatment Summary */}
-                {result.treatment && (
-                  <div className="mb-4 bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
-                    <p className="text-xs text-gray-600 font-semibold mb-1">
-                      💊 Quick Treatment
-                    </p>
-                    <p className="text-sm text-green-900">{result.treatment}</p>
-                  </div>
-                )}
-
-                {/* Full Analysis */}
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-xs text-gray-600 font-semibold mb-2">
-                    📋 Complete Analysis
-                  </p>
-                  <pre className="text-sm whitespace-pre-wrap text-gray-800 leading-relaxed">
-                    {result.fullAnalysis ||
-                      "No detailed analysis provided by AI."}
-                  </pre>
-                </div>
-
-                {/* Timestamp */}
-                {result.analyzedAt && (
-                  <p className="text-xs text-gray-500 mt-3">
-                    Analyzed at: {new Date(result.analyzedAt).toLocaleString()}
-                  </p>
-                )}
-              </div>
-            </>
-          ) : (
-            <p className="text-gray-600">
-              No result yet. Upload an image to get started.
-            </p>
-          )}
-        </div>
+          </div>
+        ) : marketData.length === 0 ? (
+          // Empty State
+          <div className="text-center py-10">
+            <p className="text-gray-500">No market data available at the moment.</p>
+            <button
+              onClick={fetchPriceData}
+              className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+            >
+              Refresh
+            </button>
+          </div>
+        ) : (
+          // Data Table
+          <>
+            <div className="mb-4 text-right">
+              <button
+                onClick={fetchPriceData}
+                className="text-green-700 hover:text-green-900 text-sm font-semibold flex items-center ml-auto"
+              >
+                🔄 Refresh Data
+              </button>
+            </div>
+            
+            <table className="w-full border-collapse text-center">
+              <thead>
+                <tr className="bg-green-700 text-white rounded-lg">
+                  <th className="py-3 px-2">Crop</th>
+                  <th className="py-3 px-2">Market</th>
+                  <th className="py-3 px-2">Price</th>
+                  <th className="py-3 px-2">Change</th>
+                </tr>
+              </thead>
+              <tbody>
+                {marketData.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="border-b hover:bg-green-100 transition"
+                  >
+                    <td className="py-3">{item.crop}</td>
+                    <td className="py-3">{item.market}</td>
+                    <td className="py-3 font-semibold">{item.price}</td>
+                    <td
+                      className={`py-3 font-bold ${
+                        item.change.includes("+")
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {item.change}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
       </div>
-    </div>
+    </section>
   );
-};
-
-export default Advisory;
+}

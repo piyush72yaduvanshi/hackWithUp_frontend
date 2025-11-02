@@ -1,11 +1,22 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Navbar from "./NavBar";
 
 export default function Prices() {
+  const [formData, setFormData] = useState({
+    crop: "",
+    city: ""
+  });
   const [priceData, setPriceData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +27,7 @@ export default function Prices() {
       setPriceData(null);
 
       const response = await axios.post(
-        "https://hackwithupbackend-main-production.up.railway.app/auth/v1/priceThroughAi",
+        "http://localhost:5000/auth/v1/priceThroughAi",
         {}, // Backend uses user's profile data (location & main_crop), no need to send crop/city
         {
           withCredentials: true, // ✅ IMPORTANT: Send authentication cookie
@@ -66,10 +77,7 @@ export default function Prices() {
   };
 
   return (
-    <div>
-      <Navbar/>
-    
-    <div className="bg-green-50 min-h-screen py-16 px-6 flex flex-col items-center ml-0 lg:ml-[300px] ">
+    <section className="bg-green-50 min-h-screen py-16 px-6 flex flex-col items-center">
       <h1 className="text-4xl font-bold text-green-800 mb-3">
         🌾 Live Market Prices
       </h1>
@@ -111,7 +119,7 @@ export default function Prices() {
                   Fetching Price...
                 </span>
               ) : (
-                'Get Price for My Crop'
+                '🤖 Get AI Price for My Crop'
               )}
             </button>
 
@@ -182,7 +190,6 @@ export default function Prices() {
           <p className="mt-4 text-gray-600">🔍 Analyzing market data...</p>
         </div>
       )}
-    </div>
-    </div>
+    </section>
   );
 }
